@@ -66,12 +66,8 @@ def inscription():
 
 
 
-application.debug = True
-
-
-
 if __name__ == '__main__':
-    http_server = HTTPServer(WSGIContainer(application))
-    http_server.listen(8000)
-    IOLoop.instance().start()
+    application.debug = True
+    application.run(host='0.0.0.0', port=80)
+
 

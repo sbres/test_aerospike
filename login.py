@@ -52,7 +52,7 @@ def login():
     if db_pass != h_password:
         return 'Wrong password', 401
     _return = {'mail': bin['mail']}
-    return _return
+    return json.dumps(_return)
 
 
 @application.route('/singin', methods=['POST'])

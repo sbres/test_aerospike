@@ -63,6 +63,7 @@ def inscription():
         client.put(key, bin)
     except Exception as e:
         logging.error('failed to put data on db // {0}'.format(e.message)), 500
+    return 'OK', 200
 
 
 

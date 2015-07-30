@@ -34,7 +34,7 @@ class Simple_load(TaskSet):
 class MyLocust(HttpLocust):
     #host = "http://127.0.0.1:8000"
     #host = "http://dev-shosha-wa6yr4q2q5.elasticbeanstalk.com"
-    #host = "http://192.168.0.42:8000"
+    host = "http://128.199.164.88:80"
     min_wait = 1000
     max_wait = 1000
-    task_set = Simple_load
+    task_set = MyTaskSet

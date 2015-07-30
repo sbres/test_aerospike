@@ -23,7 +23,7 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 
 
 config = {
-  'hosts': [ ('127.0.0.1', 3000) ]
+  'hosts': [('128.199.239.243', 3000)]
 }
 namespace = 'test'
 

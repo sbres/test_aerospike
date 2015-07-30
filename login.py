@@ -37,22 +37,26 @@ def login():
         client = aerospike.client(config).connect()
     except:
         logging.error("failed to connect to the cluster with // {0}".format(config['hosts']))
+        client.close()
         return 'KO', 500
     to_check = ['username', 'password']
     for element in to_check:
         if request.form.get(element) is None:
+            client.close()
             return '{0} not in request.'.format(element)
     username = request.form.get('username')
     password = request.form.get('password')
 
     (key, meta, bin) = client.get((namespace, 'user', username))
     if meta is None:
+        client.close()
         return 'User {0} don\'t exists.'.format(username), 422
     h_password = hashlib.sha512(password).hexdigest()
     db_pass = bin['password']
     if db_pass != h_password:
         return 'Wrong password', 401
     _return = {'mail': bin['mail']}
+    client.close()
     return json.dumps(_return)
 
 

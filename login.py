@@ -5,7 +5,7 @@ import aerospike
 import json
 import time
 import logging
-
+import socket
 
 #############   TORNADO IMPORTS   ############
 from tornado.wsgi import WSGIContainer
@@ -86,9 +86,13 @@ def inscription():
     return 'OK', 200
 
 
-
 if __name__ == '__main__':
-    application.debug = True
-    application.run(host='0.0.0.0', port=80)
-
+    hostname = socket.gethostname()
+    if hostname == 'Stephanes-MacBook-Pro.local':
+        application.debug = True
+        application.run(host='0.0.0.0', port=80)
+    else:
+        http_server = HTTPServer(WSGIContainer(application))
+        http_server.listen(80)
+        IOLoop.instance().start()
 

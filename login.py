@@ -7,11 +7,10 @@ import time
 import logging
 import socket
 
-#############   TORNADO IMPORTS   ############
-from tornado.wsgi import WSGIContainer
-from tornado.httpserver import HTTPServer
-from tornado.ioloop import IOLoop
-############# END TORNADO IMPORTS ############
+#############   GEVENT IMPORTS   ############
+
+from gevent.wsgi import WSGIServer
+############# END GEVENT IMPORTS ############
 
 application = Flask(__name__)
 logger = logging.getLogger(__name__)
@@ -97,7 +96,6 @@ if __name__ == '__main__':
         application.debug = True
         application.run(host='0.0.0.0', port=80)
     else:
-        http_server = HTTPServer(WSGIContainer(application))
-        http_server.listen(80)
-        IOLoop.instance().start()
+        http_server = WSGIServer(('', 80), application)
+        http_server.serve_forever()
 

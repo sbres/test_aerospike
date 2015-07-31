@@ -34,8 +34,8 @@ def hello_world():
 def login():
     try:
         client = aerospike.client(config).connect()
-    except:
-        logging.error("failed to connect to the cluster with // {0}".format(config['hosts']))
+    except Exception, e:
+        logging.error("failed to connect to the cluster with // {0} ".format(e.message)
         return 'KO', 500
     to_check = ['username', 'password']
     for element in to_check:

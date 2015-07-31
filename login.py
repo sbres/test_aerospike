@@ -36,7 +36,6 @@ def login():
         client = aerospike.client(config).connect()
     except:
         logging.error("failed to connect to the cluster with // {0}".format(config['hosts']))
-        client.close()
         return 'KO', 500
     to_check = ['username', 'password']
     for element in to_check:

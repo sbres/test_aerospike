@@ -82,9 +82,10 @@ def inscription():
            }
     try:
         cursor.execute("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail, h_password))
-        cursor.commit()
+        cursor.fetchall()
     except Exception as e:
-        logging.error('failed to put data on db // {0}'.format(e.message)), 500
+        logging.error('failed to put data on db // {0}'.format(e.message))
+        return 'KO', 500
     return 'OK', 200
 
 

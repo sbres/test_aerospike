@@ -48,16 +48,15 @@ def login():
     username = request.form.get('username')
     password = request.form.get('password')
     cursor = mysql.connect().cursor()
-    cursor.execute("SELECT * from user where username='{0}' and Password='{1}'".format(username, password))
+    cursor.execute("SELECT * from user where username='{0}' and password='{1}'".format(username, password))
     data = cursor.fetchone()
     if data is None:
         return 'User {0} don\'t exists.'.format(username), 422
-    print data
     h_password = hashlib.sha512(password).hexdigest()
-    db_pass = data.password
+    db_pass = data[3]
     if db_pass != h_password:
         return 'Wrong password', 401
-    _return = {'mail': data.mail}
+    _return = {'mail': data[2]}
     return json.dumps(_return)
 
 
@@ -71,7 +70,7 @@ def inscription():
     mail = request.form.get('mail')
     password = request.form.get('password')
     cursor = mysql.connect().cursor()
-    cursor.execute("SELECT * from user where username='{0}' and Password='{1}'".format(username, password))
+    cursor.execute("SELECT * from user where username='{0}' and password='{1}'".format(username, password))
     data = cursor.fetchone()
     if data is not None:
         return 'User {0} already exists.'.format(username), 422
@@ -82,7 +81,7 @@ def inscription():
            'mail': mail
            }
     try:
-        cursor.execute("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail,password))
+        cursor.execute("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail, h_password))
     except Exception as e:
         logging.error('failed to put data on db // {0}'.format(e.message)), 500
     return 'OK', 200

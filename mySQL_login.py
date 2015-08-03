@@ -47,7 +47,7 @@ def login():
     password = request.form.get('password')
     con = cnx.get_connection()
     cursor = con.cursor()
-    cursor.execute("SELECT * from user where username='{0}' and password='{1}'".format(username, password))
+    cursor.execute("SELECT * from user where username='{0}'".format(username, password))
     data = cursor.fetchone()
     if data is None:
         return 'User {0} don\'t exists.'.format(username), 422

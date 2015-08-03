@@ -20,11 +20,11 @@ from flask.ext.mysqldb import MySQL
 #############################################
 
 application = Flask(__name__)
+application.config['MYSQL_DATABASE_USER'] = 'dev'
+application.config['MYSQL_DATABASE_PASSWORD'] = 'dev'
+application.config['MYSQL_DATABASE_DB'] = 'dev'
+application.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 mysql = MySQL(application)
-mysql.config['MYSQL_DATABASE_USER'] = 'dev'
-mysql.config['MYSQL_DATABASE_PASSWORD'] = 'dev'
-mysql.config['MYSQL_DATABASE_DB'] = 'dev'
-mysql.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 

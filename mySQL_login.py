@@ -14,16 +14,16 @@ from gevent.wsgi import WSGIServer
 
 #############   Mysql imports    ############
 
-from flask.ext.mysqldb import MySQL
+from flask.ext.mysql import MySQL
 
 
 #############################################
 
 application = Flask(__name__)
-application.config['MYSQL_USER'] = 'dev'
-application.config['MYSQL_PASSWORD'] = 'dev'
-application.config['MYSQL_DB'] = 'dev'
-application.config['MYSQL_HOST'] = '127.0.0.1'
+application.config['MYSQL_DATABASE_USER'] = 'dev'
+application.config['MYSQL_DATABASE_PASSWORD'] = 'dev'
+application.config['MYSQL_DATABASE_DB'] = 'dev'
+application.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 mysql = MySQL()
 mysql.init_app(application)
 logger = logging.getLogger(__name__)

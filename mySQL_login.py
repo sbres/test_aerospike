@@ -14,24 +14,22 @@ from gevent.wsgi import WSGIServer
 
 #############   Mysql imports    ############
 
-from flask.ext.mysql import MySQL
+import mysql.connector
 
 
 #############################################
 
 application = Flask(__name__)
-application.config['MYSQL_DATABASE_USER'] = 'dev'
-application.config['MYSQL_DATABASE_PASSWORD'] = 'dev'
-application.config['MYSQL_DATABASE_DB'] = 'dev'
-application.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
-mysql = MySQL()
-mysql.init_app(application)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 # Formatter
 logging.basicConfig(filename='flask.log', level=logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+cnx = mysql.connector.connect(user='dev', database='dev', host='127.0.0.1', password='dev',
+                              pool_name = "mypool",
+                              pool_size = 20)
 
 namespace = 'test'
 
@@ -47,7 +45,8 @@ def login():
             return '{0} not in request.'.format(element)
     username = request.form.get('username')
     password = request.form.get('password')
-    cursor = mysql.connect().cursor()
+    con = cnx.get_connection()
+    cursor = con.cursor()
     cursor.execute("SELECT * from user where username='{0}' and password='{1}'".format(username, password))
     data = cursor.fetchone()
     if data is None:
@@ -69,7 +68,8 @@ def inscription():
     username = request.form.get('username')
     mail = request.form.get('mail')
     password = request.form.get('password')
-    cursor = mysql.connect().cursor()
+    con = cnx.get_connection()
+    cursor = con.cursor()
     cursor.execute("SELECT * from user where username='{0}' and password='{1}'".format(username, password))
     data = cursor.fetchone()
     if data is not None:
@@ -82,7 +82,7 @@ def inscription():
            }
     try:
         cursor.execute("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail, h_password))
-        cursor.close()
+        cursor.commit()
     except Exception as e:
         logging.error('failed to put data on db // {0}'.format(e.message))
         return 'KO', 500

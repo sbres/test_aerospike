@@ -24,7 +24,8 @@ application.config['MYSQL_DATABASE_USER'] = 'dev'
 application.config['MYSQL_DATABASE_PASSWORD'] = 'dev'
 application.config['MYSQL_DATABASE_DB'] = 'dev'
 application.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
-mysql = MySQL(application)
+mysql = MySQL()
+mysql.init_app(application)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 

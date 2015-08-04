@@ -29,7 +29,7 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 
 cnx = mysql.connector.pooling.MySQLConnectionPool(user='dev', database='dev', host='128.199.251.11', password='dev',
                               pool_name = "mypool",
-                              pool_size = 100)
+                              pool_size = 32)
 
 namespace = 'test'
 

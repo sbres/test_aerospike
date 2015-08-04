@@ -5,6 +5,7 @@ import json
 import time
 import logging
 import socket
+import meinheld
 
 #############   GEVENT IMPORTS   ############
 
@@ -116,6 +117,6 @@ if __name__ == '__main__':
 
     else:
         print 'PROD ' * 10
-        http_server = WSGIServer(('', 80), application)
-        http_server.serve_forever()
+        meinheld.listen(("0.0.0.0", 80))
+        meinheld.run(application)
 

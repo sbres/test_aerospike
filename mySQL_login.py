@@ -27,7 +27,7 @@ logger.setLevel(logging.DEBUG)
 logging.basicConfig(filename='flask.log', level=logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-cnx = mysql.connector.pooling.MySQLConnectionPool(user='dev', database='dev', host='127.0.0.1', password='dev',
+cnx = mysql.connector.pooling.MySQLConnectionPool(user='dev', database='dev', host='128.199.251.11', password='dev',
                               pool_name = "mypool",
                               pool_size = 20)
 

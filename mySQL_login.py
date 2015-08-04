@@ -78,6 +78,7 @@ def login():
     data = query_db("SELECT * from user where username='{0}'".format(username, password))
     if data == []:
         return 'User {0} don\'t exists.'.format(username), 422
+    print data
     h_password = hashlib.sha512(password).hexdigest()
     db_pass = data[3]
     if db_pass != h_password:

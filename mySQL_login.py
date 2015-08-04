@@ -29,13 +29,18 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 
 cnx = mysql.connector.pooling.MySQLConnectionPool(user='dev', database='dev', host='128.199.251.11', password='dev',
                               pool_name = "mypool",
-                              pool_size = 20)
+                              pool_size = 100)
 
 namespace = 'test'
 
 @application.route('/')
 def hello_world():
     return 'Sup ?'
+
+@application.route('/loaderio-91bf0943e1328d05b674a8b6bad6bb90')
+def loader_io():
+    return 'loaderio-91bf0943e1328d05b674a8b6bad6bb90'
+
 
 @application.route('/login', methods=['POST'])
 def login():

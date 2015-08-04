@@ -49,6 +49,11 @@ def query_db(query):
     for idx, value in enumerate(row)) for row in g.cursor.fetchall()]
     return rv
 
+def insert_db(query):
+    g.cursor.execute(query)
+    g.conn.commit()
+    return True
+
 namespace = 'test'
 
 

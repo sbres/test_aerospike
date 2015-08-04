@@ -56,8 +56,6 @@ def insert_db(query):
 
 namespace = 'test'
 
-
-
 @application.route('/')
 def hello_world():
     return 'Sup ?'
@@ -78,7 +76,6 @@ def login():
     data = query_db("SELECT * from user where username='{0}'".format(username, password))
     if data == []:
         return 'User {0} don\'t exists.'.format(username), 422
-    print data
     h_password = hashlib.sha512(password).hexdigest()
     db_pass = data[0].get('password')
     if db_pass != h_password:
@@ -107,7 +104,6 @@ def inscription():
            }
     try:
         data = insert_db("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail, h_password))
-        print data
     except Exception as e:
         logging.error('failed to put data on db // {0}'.format(e.message))
         return 'KO', 500

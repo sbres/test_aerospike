@@ -1,5 +1,5 @@
 from uuid import uuid4
-from flask import Flask, request
+from flask import Flask, request, g
 import hashlib, uuid
 import json
 import time
@@ -14,7 +14,7 @@ from gevent.wsgi import WSGIServer
 
 #############   Mysql imports    ############
 
-import mysql.connector
+import MySQLdb
 
 
 #############################################
@@ -27,11 +27,30 @@ logger.setLevel(logging.DEBUG)
 logging.basicConfig(filename='flask.log', level=logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-cnx = mysql.connector.pooling.MySQLConnectionPool(user='dev', database='dev', host='128.199.251.11', password='dev',
-                              pool_name = "mypool",
-                              pool_size = 32)
+
+@application.before_request
+def db_connect():
+    g.conn = MySQLdb.connect(host='192.168.33.10',
+                          user='dev',
+                          passwd='dev',
+                          db='dev')
+    g.cursor = g.conn.cursor()
+
+@application.after_request
+def db_disconnect(response):
+    g.cursor.close()
+    g.conn.close()
+    return response
+
+def query_db(query):
+    g.cursor.execute(query)
+    rv = [dict((g.cursor.description[idx][0], value)
+    for idx, value in enumerate(row)) for row in g.cursor.fetchall()]
+    return rv
 
 namespace = 'test'
+
+
 
 @application.route('/')
 def hello_world():
@@ -50,19 +69,15 @@ def login():
             return '{0} not in request.'.format(element)
     username = request.form.get('username')
     password = request.form.get('password')
-    con = cnx.get_connection()
-    cursor = con.cursor()
-    cursor.execute("SELECT * from user where username='{0}'".format(username, password))
-    data = cursor.fetchone()
+    data = query_db("SELECT * from user where username='{0}'".format(username, password))
+    print data
     if data is None:
-        con.close()
         return 'User {0} don\'t exists.'.format(username), 422
     h_password = hashlib.sha512(password).hexdigest()
     db_pass = data[3]
     if db_pass != h_password:
         return 'Wrong password', 401
     _return = {'mail': data[2]}
-    con.close()
     return json.dumps(_return)
 
 
@@ -75,12 +90,8 @@ def inscription():
     username = request.form.get('username')
     mail = request.form.get('mail')
     password = request.form.get('password')
-    con = cnx.get_connection()
-    cursor = con.cursor()
-    cursor.execute("SELECT * from user where username='{0}' and password='{1}'".format(username, password))
-    data = cursor.fetchone()
+    data = query_db("SELECT * from user where username='{0}' and password='{1}'".format(username, password))
     if data is not None:
-        cnx.close()
         return 'User {0} already exists.'.format(username), 422
     uid = str(uuid4())
     h_password = hashlib.sha512(password).hexdigest()
@@ -89,14 +100,9 @@ def inscription():
            'mail': mail
            }
     try:
-        cursor = con.cursor()
-        cursor.execute("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail, h_password))
-        cursor.close()
-        con.commit()
-        con.close()
+        data = query_db("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail, h_password))
     except Exception as e:
         logging.error('failed to put data on db // {0}'.format(e.message))
-        con.close()
         return 'KO', 500
     return 'OK', 200
 

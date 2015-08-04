@@ -50,14 +50,14 @@ def login():
     cursor.execute("SELECT * from user where username='{0}'".format(username, password))
     data = cursor.fetchone()
     if data is None:
-        cnx.close()
+        con.close()
         return 'User {0} don\'t exists.'.format(username), 422
     h_password = hashlib.sha512(password).hexdigest()
     db_pass = data[3]
     if db_pass != h_password:
         return 'Wrong password', 401
     _return = {'mail': data[2]}
-    cnx.close()
+    con.close()
     return json.dumps(_return)
 
 
@@ -91,9 +91,8 @@ def inscription():
         con.close()
     except Exception as e:
         logging.error('failed to put data on db // {0}'.format(e.message))
-        cnx.close()
+        con.close()
         return 'KO', 500
-    cnx.close()
     return 'OK', 200
 
 

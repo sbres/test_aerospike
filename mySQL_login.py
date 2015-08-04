@@ -56,7 +56,7 @@ namespace = 'test'
 def hello_world():
     return 'Sup ?'
 
-@application.route('/loaderio-ad9ef568269be193b06e0ea51e6c53c4')
+@application.route('/loaderio-ad9ef568269be193b06e0ea51e6c53c4.txt')
 def loader_io():
     return 'loaderio-ad9ef568269be193b06e0ea51e6c53c4'
 

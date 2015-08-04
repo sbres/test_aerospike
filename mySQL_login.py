@@ -30,7 +30,7 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 
 @application.before_request
 def db_connect():
-    g.conn = MySQLdb.connect(host='192.168.33.10',
+    g.conn = MySQLdb.connect(host='128.199.251.11',
                           user='dev',
                           passwd='dev',
                           db='dev')

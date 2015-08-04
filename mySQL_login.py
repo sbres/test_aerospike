@@ -110,9 +110,12 @@ def inscription():
 if __name__ == '__main__':
     hostname = socket.gethostname()
     if hostname == 'Stephanes-MacBook-Pro.local':
+        print 'DEV ' * 10
         application.debug = True
         application.run(host='0.0.0.0', port=80)
+
     else:
+        print 'PROD ' * 10
         http_server = WSGIServer(('', 80), application)
         http_server.serve_forever()
 

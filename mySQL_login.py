@@ -80,10 +80,10 @@ def login():
         return 'User {0} don\'t exists.'.format(username), 422
     print data
     h_password = hashlib.sha512(password).hexdigest()
-    db_pass = data[3]
+    db_pass = data[0].get('password')
     if db_pass != h_password:
         return 'Wrong password', 401
-    _return = {'mail': data[2]}
+    _return = {'mail': data[0].get('mail')}
     return json.dumps(_return)
 
 

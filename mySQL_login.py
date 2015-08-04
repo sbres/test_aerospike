@@ -105,7 +105,7 @@ def inscription():
            'mail': mail
            }
     try:
-        data = query_db("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail, h_password))
+        data = insert_db("INSERT into user (username, mail, password) VALUES ('{0}', '{1}', '{2}')".format(username, mail, h_password))
         print data
     except Exception as e:
         logging.error('failed to put data on db // {0}'.format(e.message))
